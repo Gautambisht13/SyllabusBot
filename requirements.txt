@@ -1,0 +1,41 @@
+# ---------------------------------------------------------------------------
+# SyllabusBot dependencies
+#
+#   python -m venv .venv
+#   .venv\Scripts\activate         (Windows)   |   source .venv/bin/activate
+#   pip install -r requirements.txt
+#
+# Verified against: langchain-core 1.6.0, langchain-text-splitters 1.1.2,
+# langchain-chroma 1.1.0, chromadb 1.5.9, langchain-anthropic 1.6.1,
+# langchain-openai 1.6.0, langchain-huggingface 1.2.2, pypdf 6.16.2 (Python 3.12).
+#
+# NOTE: `langchain-huggingface` pulls in `torch` via `sentence-transformers`
+# (~2.5 GB on GPU wheels). For a CPU-only box install torch first:
+#   pip install torch --index-url https://download.pytorch.org/whl/cpu
+# If you only ever use OpenAI embeddings you can drop the two HF lines.
+# ---------------------------------------------------------------------------
+
+# --- LangChain core + the pieces we actually import ------------------------
+langchain-core>=1.0              # Runnables (LCEL), prompts, Document, parsers
+langchain-text-splitters>=1.0    # RecursiveCharacterTextSplitter
+langchain-chroma>=1.0            # Chroma vector store integration
+# NOTE: `langchain-community` is deliberately NOT required. Its PyPDFLoader is
+# a thin wrapper over pypdf and the package is being sunset upstream, so
+# loaders.py calls pypdf directly instead.
+
+# --- Model providers (install what you use; imports are lazy) -------------
+langchain-anthropic>=1.0         # ChatAnthropic  (default chat model)
+langchain-openai>=1.0            # ChatOpenAI + OpenAIEmbeddings
+langchain-huggingface>=1.0       # HuggingFaceEmbeddings (all-MiniLM-L6-v2)
+sentence-transformers>=3.0       # backend for the HF embedding model
+
+# --- Storage / parsing / config -------------------------------------------
+chromadb>=1.0                    # local persistent vector database
+pypdf>=5.0                       # PDF text extraction
+python-dotenv>=1.0               # .env loading
+
+# --- Interfaces -----------------------------------------------------------
+streamlit>=1.40                  # optional web UI (app.py)
+
+# --- Dev-only: demo PDFs (scripts/make_sample_pdfs.py) --------------------
+reportlab>=4.0

@@ -1,0 +1,11 @@
+.env
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+storage/
+.streamlit/secrets.toml
+
+# Institutional PDFs are usually not redistributable — keep them local.
+data/**/*.pdf
+!data/**/.gitkeep
