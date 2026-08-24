@@ -8,7 +8,6 @@ interfaces can never drift in behaviour.
 
 from __future__ import annotations
 
-import os
 from dataclasses import replace
 
 import streamlit as st
@@ -18,14 +17,6 @@ from syllabusbot.config import get_settings
 from syllabusbot.errors import SyllabusBotError
 from syllabusbot.retriever import build_citations
 
-# --- Auto-generate and ingest sample PDFs if vector store is empty (for cloud deployment) ---
-if not os.path.exists("storage/chroma") or not os.listdir("storage/chroma"):
-    with st.spinner("Generating sample PDFs and building vector index..."):
-        try:
-            make_sample_pdfs()
-            ingest_documents()
-        except Exception as e:
-            st.error(f"Error initializing data: {e}")
 
 EXAMPLES = [
     "What is the policy for late assignment submissions in CS101?",
