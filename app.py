@@ -8,6 +8,7 @@ interfaces can never drift in behaviour.
 
 from __future__ import annotations
 
+import os
 from dataclasses import replace
 
 import streamlit as st
@@ -16,6 +17,13 @@ from syllabusbot.chain import SyllabusBot
 from syllabusbot.config import get_settings
 from syllabusbot.errors import SyllabusBotError
 from syllabusbot.retriever import build_citations
+from syllabusbot.ingest import ingest_documents
+from scripts.make_sample_pdfs import main as make_sample_pdfs
+
+if not os.path.exists("storage/chroma") or not os.listdir("storage/chroma"):
+    with st.spinner("Generating sample PDFs and building vector index..."):
+        make_sample_pdfs()
+        ingest_documents()
 
 EXAMPLES = [
     "What is the policy for late assignment submissions in CS101?",
