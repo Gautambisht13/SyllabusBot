@@ -9,6 +9,7 @@ interfaces can never drift in behaviour.
 from __future__ import annotations
 
 import os
+import subprocess
 from dataclasses import replace
 
 import streamlit as st
@@ -17,13 +18,13 @@ from syllabusbot.chain import SyllabusBot
 from syllabusbot.config import get_settings
 from syllabusbot.errors import SyllabusBotError
 from syllabusbot.retriever import build_citations
-from syllabusbot.ingest import ingest_documents
-from scripts.make_sample_pdfs import main as make_sample_pdfs
 
+# --- Auto-generate and ingest sample PDFs if vector store is empty (for cloud deployment) ---
 if not os.path.exists("storage/chroma") or not os.listdir("storage/chroma"):
     with st.spinner("Generating sample PDFs and building vector index..."):
-        make_sample_pdfs()
-        ingest_documents()
+        # Run sample script and ingestion as subprocesses to match command line execution
+        subprocess.run(["python", "scripts/make_sample_pdfs.py"], check=True)
+        subprocess.run(["python", "-m", "syllabusbot.ingest"], check=True)
 
 EXAMPLES = [
     "What is the policy for late assignment submissions in CS101?",
